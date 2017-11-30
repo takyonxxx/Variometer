@@ -2,7 +2,7 @@
 Paraglider ,  Hang Glider , Gider Variometer <br/>
 https://play.google.com/store/apps/details?id=com.variometerpro
 
-Devices which supports barometric sensor :
+Devices which supports barometric sensor :<br/>
 http://www.gsmarena.com/results.php3?sName=&idMaker=0&sFreeText=barometer<br/>
 
 <p align="center"><a href="https://github.com/takyonxxx/Variometer/blob/master/variometer.png">
