@@ -1,0 +1,38 @@
+<Task fai_finish="0" finish_min_height_ref="AGL" finish_min_height="0" start_max_height_ref="AGL" start_max_height="0" start_max_speed="0" start_requires_arm="0" aat_min_time="10800" type="RT">
+	<Point type="Start">
+    		<Waypoint altitude="1945" comment="D01194" id="18" name="D01194">
+    			<Location latitude="38.1622" longitude="34.1648"/>
+    		</Waypoint>
+    		<ObservationZone radius="5000" type="Cylinder"/>
+    	</Point>
+    	<Point type="Turn">
+    		<Waypoint altitude="1034" comment="B04105" id="38" name="B04105">
+    			<Location latitude="38.4987" longitude="33.9476"/>
+    		</Waypoint>
+    		<ObservationZone radius="24000" type="Cylinder"/>
+    	</Point>
+    	<Point type="Turn">
+    		<Waypoint altitude="1034" comment="B04105" id="38" name="B04105">
+    			<Location latitude="38.4987" longitude="33.9476"/>
+    		</Waypoint>
+    		<ObservationZone radius="34000" type="Cylinder"/>
+    	</Point>
+    	<Point type="Turn">
+    		<Waypoint altitude="1034" comment="B04105" id="38" name="B04105">
+    			<Location latitude="38.4987" longitude="33.9476"/>
+    		</Waypoint>
+    		<ObservationZone radius="24000" type="Cylinder"/>
+    	</Point>
+    	<Point type="Turn">
+    		<Waypoint altitude="1218" comment="G09125" id="11" name="G09125">
+    			<Location latitude="38.542" longitude="34.4988"/>
+    		</Waypoint>
+    		<ObservationZone radius="2000" type="Cylinder"/>
+    	</Point>
+    	<Point type="Finish">
+    		<Waypoint altitude="1218" comment="G09125" id="11" name="G09125">
+    			<Location latitude="38.542" longitude="34.4988"/>
+    		</Waypoint>
+    		<ObservationZone length="200" type="Line"/>
+    	</Point>
+</Task>

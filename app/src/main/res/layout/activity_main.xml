@@ -1,0 +1,388 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#111111"
+    android:padding="1dip">
+
+    <TextView
+        android:id="@+id/Gpsfix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Looking for Satellites"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#E5E4E2"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.variometerpro.GraphView
+        android:id="@+id/graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/volumedec"
+        android:layout_toLeftOf="@+id/altdec"
+        android:layout_toRightOf="@+id/volumedec"
+        android:layout_above="@+id/mute" />
+
+    <ProgressBar
+        android:id="@+id/climb_progressbar"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/altinc"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/Distancetakeoff"
+        android:padding="3dp" />
+
+    <ProgressBar
+        android:id="@+id/sink_progressbar"
+        style="@style/Widget.ProgressBar.OppsVertical"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/volumeinc"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Distancetakeoff"
+        android:padding="3dp" />
+
+    <TextView
+        android:id="@+id/Altitude_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Gpsfix"
+        android:padding="1dp"
+        android:text="Alt Baro"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#98AFC7"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/AltitudeBaro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Altitude_txt"
+        android:padding="1dp"
+        android:text="0 m"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#E5E4E2"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/AltitudeGps_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Gpsfix"
+        android:layout_centerHorizontal="true"
+        android:padding="1dp"
+        android:text="Alt Gps"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#98AFC7"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/AltitudeGps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/AltitudeGps_txt"
+        android:layout_centerHorizontal="true"
+        android:padding="1dp"
+        android:text="0 m"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#E5E4E2"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Distancetakeoff_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Wind_Speed"
+        android:padding="1dp"
+        android:text="Distance"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#98AFC7"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Distancetakeoff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Distancetakeoff_txt"
+        android:padding="1dp"
+        android:text="0 m"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#E5E4E2"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Wind_Speed_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/AltitudeBaro"
+        android:padding="1dp"
+        android:text="Wind"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#98AFC7"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Wind_Speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Wind_Speed_txt"
+        android:padding="1dp"
+        android:text="0 km"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#E5E4E2"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Speed_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/Gpsfix"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="Speed"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#98AFC7"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/Speed_txt"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="0 km"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#E5E4E2"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Vert_Speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Distancetakeoff_txt"
+        android:layout_alignParentRight="true"
+        android:padding="3dp"
+        android:text="0 m/s"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FF0000"
+        android:textSize="56sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <TextView
+        android:id="@+id/Temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/climb_progressbar"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="0 °C"
+        android:textColor="#E5E4E2"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Temperature_Txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/Vert_Speed"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="Temperature"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#98AFC7"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Longitudetxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/climb_progressbar"
+        android:layout_toLeftOf="@+id/climb_progressbar"
+        android:padding="1dp"
+        android:text="0"
+        android:textColor="#b3ecff"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Latitudetxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/sink_progressbar"
+        android:layout_toRightOf="@+id/sink_progressbar"
+        android:padding="1dp"
+        android:text="0"
+        android:textColor="#b3ecff"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/TextUtm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/volumeinc"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="Utm Coordinates"
+        android:textColor="#b3ecff"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextLive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/graph"
+        android:layout_below="@+id/TextUtm"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="LiveTrack24: not live"
+        android:textColor="#E5E4E2"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/compass_rose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TextUtm"
+        android:layout_below="@+id/Latitudetxt"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/climb_progressbar"
+        android:layout_toRightOf="@+id/sink_progressbar"
+        android:src="@drawable/compass_back" />
+
+    <ImageView
+        android:id="@+id/compass_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TextUtm"
+        android:layout_below="@+id/Latitudetxt"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/climb_progressbar"
+        android:layout_toRightOf="@+id/sink_progressbar"
+        android:src="@drawable/compass_arrow" />
+
+    <ImageView
+        android:id="@+id/compass_point"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/Distancetakeoff"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/climb_progressbar"
+        android:layout_toRightOf="@+id/sink_progressbar"
+        android:src="@drawable/point" />
+
+
+
+    <LinearLayout
+        android:id="@+id/LinearLayoutButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/mute"
+        style="@style/btnStyle_green"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Mute" />
+
+    <Button
+        android:id="@+id/exit"
+        style="@style/btnStyle_green"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="EXIT" />
+
+    <Button
+        android:id="@+id/volumeinc"
+        style="@style/btnStyle"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/volumedec"
+        android:layout_alignParentLeft="true"
+        android:text="Vol ( + )" />
+
+    <Button
+        android:id="@+id/volumedec"
+        style="@style/btnStyle"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mute"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="Vol ( - )" />
+
+    <Button
+        android:id="@+id/altinc"
+        style="@style/btnStyle"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/volumeinc"
+        android:layout_alignBottom="@+id/volumeinc"
+        android:layout_alignParentRight="true"
+        android:text="Alt ( + )" />
+
+    <Button
+        android:id="@+id/altdec"
+        style="@style/btnStyle"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/altinc"
+        android:text="Alt ( - )" />
+
+    <Button
+        android:text="Settings"
+        style="@style/btnStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/graph"
+        android:layout_toRightOf="@+id/mute"
+        android:padding="6dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_settings"
+        android:layout_toLeftOf="@+id/exit"
+        android:layout_toStartOf="@+id/exit" />
+
+</RelativeLayout>
