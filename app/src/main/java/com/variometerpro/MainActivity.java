@@ -53,7 +53,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -66,6 +65,7 @@ public class MainActivity extends Activity {
     private static final double KF_VAR_MEASUREMENT = 0.05;  // Variance of pressure measurement noise.
 
     private final static int REQUEST_LOCATION = 1;
+    private final static int MY_PERMISSIONS_REQUEST_READ_STORAGE = 2;
 
     private boolean isGPSEnabled = false, isNetworkEnabled = false;
     private boolean loginLW = false, livetrackenabled = false, error = false, getvalues = false;
@@ -196,7 +196,7 @@ public class MainActivity extends Activity {
 
             isNetworkEnabled = locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            AppLog.logString("AppLog gps starting");
+            StoragePermissionCheck();
 
             if(GPSPremissionCheck() && isGPSEnabled)
             {
@@ -502,8 +502,13 @@ public class MainActivity extends Activity {
             if(logging && dt >= logTime)
             {
                 setigcfile();
-                //AppLog.logString("AppLog : " + currentLatitude + " - " +  currentLongitude);
             }
+            /*else
+            {
+                setigcfile();
+                flashMessage("AppLog : setigcfile " + currentLatitude + " - " +  currentLongitude);
+                AppLog.logString("AppLog : setigcfile " + currentLatitude + " - " +  currentLongitude);
+            }*/
 
             if (!getTakeoff) {
 
@@ -515,14 +520,10 @@ public class MainActivity extends Activity {
 
                 if (!logging)
                 {
-                    try {
-                        trckCount = 0;
-                        preparelogheader();
-                        logging = true;
-                        File root = new File(Environment.getExternalStorageDirectory(), "VarioLog");
-                        flashMessage("IGC Log File path\n" + root.toString());
-                    } catch (Exception e) {
-                    }
+                    preparelogheader();
+                    logging = true;
+                    File root = new File(Environment.getExternalStorageDirectory(), "VarioLog");
+                    flashMessage("IGC Log File path\n" + root.toString());
                 }
             }
 
@@ -720,8 +721,24 @@ public class MainActivity extends Activity {
             };
 
             locManager.addGpsStatusListener(gpsStatusListener);
+    }
+    public static int getMyPermissionsRequestReadStorage() {
+        return MY_PERMISSIONS_REQUEST_READ_STORAGE;
+    }
 
-            AppLog.logString("AppLog gps started...");
+    private boolean StoragePermissionCheck()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.checkSelfPermission(android.Manifest.permission. READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{Manifest.permission. READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_STORAGE);
+            return false;
+        }
+        else
+        {
+            AppLog.logString("AppLog Storage PERMISSION_GRANTED");
+            return true;
+        }
     }
 
     private boolean GPSPremissionCheck()
@@ -732,21 +749,51 @@ public class MainActivity extends Activity {
                 && this.checkSelfPermission(
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},1);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION);
             return false;
         }
         else
         {
-            AppLog.logString("AppLog PERMISSION_GRANTED");
+            AppLog.logString("AppLog Gps PERMISSION_GRANTED");
             return true;
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {            //  gps functionality
-            AppLog.logString("AppLog PERMISSION_GRANTED");
-            GetCurrentLocation();
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        if (requestCode == REQUEST_LOCATION)
+        {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {            //  gps functionality
+                AppLog.logString("AppLog Gps PERMISSION_GRANTED");
+                GetCurrentLocation();
+            }
+            else
+            {
+                Toast.makeText(this, "We Need permission for running gps", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (requestCode == MY_PERMISSIONS_REQUEST_READ_STORAGE)
+        {
+            //premission to read storage
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                AppLog.logString("AppLog Storage PERMISSION_GRANTED");
+
+            } else
+            {
+                Toast.makeText(this, "We Need permission for logging to Storage", Toast.LENGTH_SHORT).show();
+            }
+
+            if(GPSPremissionCheck() && isGPSEnabled)
+            {
+                GetCurrentLocation();
+            }
+            else
+            {
+                checkLocationProviders();
+            }
         }
     }
 
@@ -998,7 +1045,9 @@ public class MainActivity extends Activity {
         File myFile = null;
         try {
             if (!logfooter) {
+                //mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorageDirectory", "()Ljava/io/File;");
                 File root = new File(Environment.getExternalStorageDirectory(), "VarioLog");
+                AppLog.logString("AppLog: path= " + root);
                 if (!root.exists()) {
                     root.mkdirs();
                 }
@@ -1020,7 +1069,7 @@ public class MainActivity extends Activity {
     public void flashMessage(String customText) {
         try {
 
-            Toast.makeText(getBaseContext(), customText, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), customText, Toast.LENGTH_LONG).show();
 
         } catch (NullPointerException e) {
             e.printStackTrace();
