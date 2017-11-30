@@ -838,15 +838,15 @@ public class MainActivity extends Activity {
     public void setvario(double value)
     {
         if (lastAltitude != 0) {
-            try {
+
                 final double curr_measurement_time = SystemClock.elapsedRealtime() / 1000.0f;
                 final double dt = curr_measurement_time - last_measurement_time;
 
                 if (!barometer)
                 {
                     baroAltitude = value;
-                    baroAltitude = ((damping * baroAltitude / 100) + ((100 - (damping)) * lastAltitude / 100));
-                    altitudeFilter.update(baroAltitude, KF_VAR_MEASUREMENT, dt);
+                    baroAltitude = ((50 * baroAltitude / 100) + ((100 - 50) * lastAltitude / 100));
+                    avgvario = baroAltitude - lastAltitude;
                 }
                 else
                 {
@@ -855,9 +855,8 @@ public class MainActivity extends Activity {
                     baroAltitude = (long) Converter.hPaToMeter(slp_inHg_, pressureFilter.getXAbs());
                     baroAltitude = ((damping * baroAltitude / 100) + ((100 - (damping)) * lastAltitude / 100));
                     altitudeFilter.update(baroAltitude, KF_VAR_MEASUREMENT, dt);
+                    avgvario = altitudeFilter.getXVel();
                 }
-
-                avgvario = altitudeFilter.getXVel();
 
                 if (avgvario >= 0) {
                     climbProgress.setProgress((int) (avgvario * 100 / 8));
@@ -870,6 +869,8 @@ public class MainActivity extends Activity {
                 }
 
                 VertSpeed.setText(String.format("%.1f m/s", avgvario));
+
+                if (barometer)
                 AltitudeBaro.setText(String.format("%.0f m", baroAltitude));
 
                 playsound();
@@ -881,9 +882,6 @@ public class MainActivity extends Activity {
 
                 lastAltitude = baroAltitude;
                 last_measurement_time = curr_measurement_time;
-
-            } catch (Exception e) {
-            }
         } else
         {
             if (!barometer)
