@@ -502,13 +502,8 @@ public class MainActivity extends Activity {
             if(logging && dt >= logTime)
             {
                 setigcfile();
+                last_log_time = curr_log_time;
             }
-            /*else
-            {
-                setigcfile();
-                flashMessage("AppLog : setigcfile " + currentLatitude + " - " +  currentLongitude);
-                AppLog.logString("AppLog : setigcfile " + currentLatitude + " - " +  currentLongitude);
-            }*/
 
             if (!getTakeoff) {
 
@@ -578,7 +573,6 @@ public class MainActivity extends Activity {
 
             lastLatitude = currentLatitude;
             lastLongitude = currentLongitude;
-            last_log_time = curr_log_time;
         }
     }
 
@@ -653,7 +647,7 @@ public class MainActivity extends Activity {
 
             gpsProvider = locManager.getBestProvider(criteria, true);
             lastLocation = locManager.getLastKnownLocation(gpsProvider);
-            locManager.requestLocationUpdates(gpsProvider, 0, 0, locListener);
+            locManager.requestLocationUpdates(gpsProvider, GPS_TIMEUPDATE, GPS_DISTANCEUPDATE, locListener);
 
             if(lastLocation != null)
             {
