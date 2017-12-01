@@ -722,10 +722,14 @@ public class MainActivity extends Activity {
 
     private boolean StoragePermissionCheck()
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.checkSelfPermission(android.Manifest.permission. READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && this.checkSelfPermission(
+                        Manifest.permission. READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
+                && this.checkSelfPermission(
+                        Manifest.permission. WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
         {
-            requestPermissions(new String[]{Manifest.permission. READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_STORAGE);
+            requestPermissions(new String[]{Manifest.permission. READ_EXTERNAL_STORAGE, Manifest.permission. WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_STORAGE);
             return false;
         }
         else
@@ -739,11 +743,12 @@ public class MainActivity extends Activity {
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && this.checkSelfPermission(
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && this.checkSelfPermission(
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION);
             return false;
         }
         else
