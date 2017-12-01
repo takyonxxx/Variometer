@@ -1,8 +1,3 @@
-/*
- * Author: Sami Salkosuo, sami.salkosuo@fi.ibm.com
- *
- * (c) Copyright IBM Corp. 2007
- */
 package com.variometerpro;
 
 import java.text.DecimalFormat;
