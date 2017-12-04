@@ -2,6 +2,18 @@
 
 <resources>
 
+    <string-array name="gpspower">
+        <item name="3">HIGH (gps)</item>
+        <item name="2">MEDIUM (network)</item>
+        <item name="1">LOW (network)</item>
+    </string-array>
+
+    <string-array name="gpspowerValues">
+        <item name="3">3</item>
+        <item name="2">2</item>
+        <item name="1">1</item>
+    </string-array>
+
     <string-array name="updateInterval">
         <item name="1">Every 1 second</item>
         <item name="2">Every 2 seconds</item>
