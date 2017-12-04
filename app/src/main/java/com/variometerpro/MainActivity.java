@@ -61,6 +61,14 @@ public class MainActivity extends Activity {
 
     private final static String DEGREE = "\u00b0";
 
+    protected static final int REQUEST_PRIORITY_LOW_POWER = 1;
+    protected static final int REQUEST_PRIORITY_BALANCED_POWER_ACCURACY = 2;
+    protected static final int REQUEST_PRIORITY_HIGH_ACCURACY = 3;
+
+    Criteria criteria = null;
+
+    private int gpsPower = REQUEST_PRIORITY_HIGH_ACCURACY;
+
     private static final double KF_VAR_ACCEL = 0.0075;  // Variance of pressure acceleration noise input.
     private static final double KF_VAR_MEASUREMENT = 0.05;  // Variance of pressure measurement noise.
 
@@ -126,11 +134,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setContentView(R.layout.activity_main);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
         wl.acquire();
-        setContentView(R.layout.activity_main);
 
         PackageManager PM = this.getPackageManager();
         gps = PM.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
@@ -285,14 +293,34 @@ public class MainActivity extends Activity {
         }
         else
         {
-            if (barometer) {
-                startvario();
+            getPreferences();
+
+            if(locManager != null && locListener != null)
+            {
+                locManager.removeUpdates((LocationListener) locListener);
+                locManager = null;
             }
+
+            criteria = new Criteria();
+
+            if(gpsPower == REQUEST_PRIORITY_HIGH_ACCURACY)
+                criteria.setPowerRequirement(Criteria.POWER_HIGH);
+            else if(gpsPower == REQUEST_PRIORITY_BALANCED_POWER_ACCURACY)
+                criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+            else if(gpsPower == REQUEST_PRIORITY_LOW_POWER)
+                criteria.setPowerRequirement(Criteria.POWER_LOW);
+
+            criteria.setAltitudeRequired(false);
+            criteria.setBearingRequired(false);
+            criteria.setCostAllowed(false);
 
             locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             isGPSEnabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
             isNetworkEnabled = locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            if (barometer) {
+                startvario();
+            }
 
             StoragePermissionCheck();
 
@@ -327,6 +355,46 @@ public class MainActivity extends Activity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        getPreferences();
+
+        if (barometer) {
+            startvario();
+        }
+
+        if(locManager != null && locListener != null)
+        {
+            locManager.removeUpdates((LocationListener) locListener);
+            locManager = null;
+        }
+
+        criteria = new Criteria();
+
+        if(gpsPower == REQUEST_PRIORITY_HIGH_ACCURACY) {
+            criteria.setPowerRequirement(Criteria.POWER_HIGH);
+            flashMessage("Gps Power : POWER_HIGH");
+        }
+        else if(gpsPower == REQUEST_PRIORITY_BALANCED_POWER_ACCURACY) {
+            criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+            flashMessage("Gps Power : POWER_MEDIUM");
+        }
+        else if(gpsPower == REQUEST_PRIORITY_LOW_POWER) {
+            criteria.setPowerRequirement(Criteria.POWER_LOW);
+            flashMessage("Gps Power : POWER_LOW");
+        }
+
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(false);
+
+        locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        isGPSEnabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isNetworkEnabled = locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        GetCurrentLocation();
+    }
+
+    private void getPreferences()
+    {
         if (!getvalues) {
             getvalues();
             getvalues = true;
@@ -365,6 +433,9 @@ public class MainActivity extends Activity {
             setLivePos emitPos = new setLivePos();
             emitPos.execute(3);
         }
+
+        String gpspowerstr = preferences.getString("gps_power", "3");
+        gpsPower = (int) Integer.parseInt(gpspowerstr);
     }
 
     private void setClipboard(Context context, String text) {
@@ -646,13 +717,6 @@ public class MainActivity extends Activity {
                 }
             };
 
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setAltitudeRequired(false);
-            criteria.setBearingRequired(false);
-            criteria.setCostAllowed(false);
-            criteria.setPowerRequirement(Criteria.POWER_HIGH);
-
             last_log_time = SystemClock.elapsedRealtime();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -663,7 +727,7 @@ public class MainActivity extends Activity {
                 }
             }
 
-            gpsProvider = locManager.getBestProvider(criteria, true);
+            gpsProvider = locManager.getBestProvider(criteria, false);
             lastLocation = locManager.getLastKnownLocation(gpsProvider);
             locManager.requestLocationUpdates(gpsProvider, GPS_TIMEUPDATE, GPS_DISTANCEUPDATE, locListener);
 
