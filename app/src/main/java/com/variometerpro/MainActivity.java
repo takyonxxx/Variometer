@@ -160,68 +160,34 @@ public class MainActivity extends Activity {
         needleImage = (ImageView) findViewById(R.id.compass_arrow);
         mGraphView = (GraphView) findViewById(R.id.graph);
 
+        climbProgress = (ProgressBar) findViewById(R.id.climb_progressbar);
+        sinkProgress = (ProgressBar) findViewById(R.id.sink_progressbar);
+        climbProgress.setMax(100);
+        sinkProgress.setMax(100);
+
         compass = new Compass(compassImage);
         needle = new Compass(needleImage);
+        amanager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         Converter = new Conversion();
+        windCalculator = new WindCalculator(16, 0.3, 300);
+        wind = new double[3];
 
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         formattedDate = df.format(c.getTime());
         logFileName = "FlightLog_" + formattedDate.replace(" ", "_");
-        SimpleDateFormat dfdetail = new SimpleDateFormat("ddMMyy");
-        formattedDate = dfdetail.format(c.getTime());
-
-        windCalculator = new WindCalculator(16, 0.3, 300);
-        wind = new double[3];
-
-        if (!gps) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder
-                    .setMessage("GPS is not supported on this device!")
-                    .setCancelable(true)
-                    .setPositiveButton("OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int id) {
-                                    exit();
-                                }
-                            });
-            AlertDialog alert = alertDialogBuilder.create();
-            alert.show();
-        }
-        else
-        {
-            locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            isGPSEnabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            isNetworkEnabled = locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-            StoragePermissionCheck();
-
-            if(GPSPremissionCheck() && isGPSEnabled)
-            {
-                GetCurrentLocation();
-            }
-            else
-            {
-                checkLocationProviders();
-            }
-        }
-
-        climbProgress = (ProgressBar) findViewById(R.id.climb_progressbar);
-        sinkProgress = (ProgressBar) findViewById(R.id.sink_progressbar);
-        climbProgress.setMax(100);
-        sinkProgress.setMax(100);
-        amanager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-
-        if (barometer) {
-            startvario();
-        }
 
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 exit();
+            }
+        });
+        Utm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+               setClipboard(basecontext,Utm.getText().toString());
+               flashMessage("Utm coordinate (" + Utm.getText().toString() + ") copied to clipboard.");
             }
         });
 
@@ -299,6 +265,44 @@ public class MainActivity extends Activity {
             }
         });
 
+        if (!gps) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder
+                    .setMessage("GPS is not supported on this device!")
+                    .setCancelable(true)
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+                                    exit();
+                                }
+                            });
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+        }
+        else
+        {
+            if (barometer) {
+                startvario();
+            }
+
+            locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            isGPSEnabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            isNetworkEnabled = locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            StoragePermissionCheck();
+
+            if(GPSPremissionCheck() && isGPSEnabled)
+            {
+                GetCurrentLocation();
+            }
+            else
+            {
+                checkLocationProviders();
+            }
+        }
+
     }
     @Override
     public void onDestroy() {
@@ -357,6 +361,17 @@ public class MainActivity extends Activity {
         if (loginLW && !livetrackenabled) {
             setLivePos emitPos = new setLivePos();
             emitPos.execute(3);
+        }
+    }
+
+    private void setClipboard(Context context, String text) {
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboard.setText(text);
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
+            clipboard.setPrimaryClip(clip);
         }
     }
 
