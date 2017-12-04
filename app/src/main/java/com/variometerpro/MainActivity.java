@@ -177,6 +177,9 @@ public class MainActivity extends Activity {
         formattedDate = df.format(c.getTime());
         logFileName = "FlightLog_" + formattedDate.replace(" ", "_");
 
+        SimpleDateFormat dfdetail = new SimpleDateFormat("ddMMyy");
+        formattedDate = dfdetail.format(c.getTime());
+
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
