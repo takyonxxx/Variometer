@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="Vario Settings"
-        android:key="first_category">  
+        android:title="Vario - Gps Settings"
+        android:key="first_category">
+        <ListPreference
+            android:defaultValue="3"
+            android:entries="@array/gpspower"
+            android:entryValues="@array/gpspowerValues"
+            android:key="gps_power"
+            android:summary="Chose Gps power option"
+            android:title="Gps Power Usage" />
         <ListPreference android:key="dumpLevel" android:title="@string/preferences_dumpLevel"	        
 	        android:entries="@array/dump_level" 
 	        android:entryValues="@array/dump_level_value"
-	        android:summary="Optimum is 4"
+	        android:summary="Optimum is 1"
 	        android:defaultValue="100" />
         <ListPreference
             android:key="log_updates_interval"
